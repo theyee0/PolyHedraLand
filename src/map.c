@@ -12,7 +12,7 @@ int seed = 1845;
 
    Taken from the original permutation by Ken Perlin.
 */
-static int permutation[256] = {
+static const int permutation[256] = {
         151, 160, 137,  91,  90,  15, 131,  13, 201,  95,  96,  53, 194, 233,   7, 225,
         140,  36, 103,  30,  69, 142,   8,  99,  37, 240,  21,  10,  23, 190,   6, 148,
         247, 120, 234,  75,   0,  26, 197,  62,  94, 252, 219, 203, 117,  35,  11,  32,
@@ -95,7 +95,7 @@ static float vector_product(const int x0, const int y0, const float x, const flo
    @param y Rightmost value
    @param s Fraction of the way between the bounds x and y
 */
-static float linear_interpolate(float x, float y, float s) {
+static float linear_interpolate(const float x, const float y, const float s) {
         return x + s * (y - x);
 }
 
@@ -111,7 +111,7 @@ static float linear_interpolate(float x, float y, float s) {
    @param y Rightmost value
    @param s Fraction of the way between the bounds x and y
 */
-static float interpolate(float x, float y, float s) {
+static float interpolate(const float x, const float y, const float s) {
         return linear_interpolate(x, y, s * s * s * (s * (6 * s - 15) + 10));
 }
 
@@ -148,16 +148,17 @@ static float perlin2d(const float x, const float y) {
         return interpolate(s, t, yf);
 }
 
-float fractal_perlin2d(float x, float y, float freq, int depth) {
+float fractal_perlin2d(const float x, const float y, const float freq, const int depth) {
         float v = 0;
         float amp = 1;
+        float f = freq;
         int i;
 
         for (i = 0; i < depth; i++) {
-                v += perlin2d(x * freq, y * freq) * amp;
+                v += perlin2d(x * f, y * f) * amp;
 
                 amp /= 2;
-                freq *= 2;
+                f *= 2;
         }
 
         return v;

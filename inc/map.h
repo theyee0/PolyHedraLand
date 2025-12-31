@@ -21,6 +21,6 @@ extern int seed;
    @param freq Frequency of generated noise map
    @param depth Number of octaves of noise combined
 */
-float fractal_perlin2d(float x, float y, float freq, int depth);
+float fractal_perlin2d(const float x, const float y, const float freq, const int depth);
 
 #endif
