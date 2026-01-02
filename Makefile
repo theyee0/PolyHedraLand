@@ -9,7 +9,7 @@ SRC_DIR := src
 LIB_DIR := lib
 OBJ_DIR := obj
 
-SRC_FILES := main map
+SRC_FILES := main map render
 OBJ_FILES := $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(SRC_FILES)))
 
 all: $(NAME)
