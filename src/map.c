@@ -1,5 +1,6 @@
 #include "map.h"
 #include <stdio.h>
+#include <assert.h>
 
 int seed = 1845;
 
@@ -60,25 +61,17 @@ static int hash(const int x, const int y) {
    @param y y-value of given vector
 */
 static float vector_product(const int x0, const int y0, const float x, const float y) {
-        const int h = hash(x0, y0) % 8;
+        const int h = hash(x0, y0) % 4;
 
         switch (h) {
         case 0:
-		return x;
-	case 1:
-		return y;
-	case 2:
-		return -x;
-	case 3:
-		return -y;
-        case 4:
-                return x + y;
-        case 5:
-                return x - y;
-        case 6:
-                return -x + y;
-        case 7:
-                return -x - y;
+                return x;
+        case 1:
+                return y;
+        case 2:
+                return -x;
+        case 3:
+                return -y;
         default:
                 return 0;
         }
@@ -128,8 +121,9 @@ static float interpolate(const float x, const float y, const float s) {
    @param y Real-valued y-coordinate of point
 */
 static float perlin2d(const float x, const float y) {
-        const int x0 = (int)x;
-        const int y0 = (int)y;
+        /* Convert to integer, rounding to negative infinity */
+        const int x0 = (int)x + (x < 0 ? -1 : 0);
+        const int y0 = (int)y + (y < 0 ? -1 : 0);
 
         const int x1 = x0 + 1;
         const int y1 = y0 + 1;
@@ -151,15 +145,17 @@ static float perlin2d(const float x, const float y) {
 float fractal_perlin2d(const float x, const float y, const float freq, const int depth) {
         float v = 0;
         float amp = 1;
+        float mag = 0;
         float f = freq;
         int i;
 
         for (i = 0; i < depth; i++) {
                 v += perlin2d(x * f, y * f) * amp;
+                mag += amp;
 
                 amp /= 2;
                 f *= 2;
         }
 
-        return v;
+        return v / mag;
 }
